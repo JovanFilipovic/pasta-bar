@@ -25,22 +25,42 @@ public class PastaBar {
 			System.out.print("Izaberite sastojak za pastu: ");
 			String ingridient = s.next();
 
-			if (!ingridient.equals("poruci")) {
+			if (!ingridient.equals("poruci") && findIngredient(ingridients, ingridient) != 0) {
 
 				orderPrice = orderPrice + prices[findIngredient(ingridients, ingridient)];
 
-			} else {
+				System.out.println("Uzeli ste " + ingridient + " ukupno " + orderPrice + "rsd");
+
+			} else if (ingridient.equals("poruci")) {
 
 				System.out.print("Unesite broj telefona: ");
 				String phone = s.next();
+				System.out.println();
 
 				if (isRegularCustomer(phoneNumbers, phone) == true) {
-					
-					orderPrice = orderPrice - ( orderPrice * 10/100);
-					System.out.println(orderPrice);
+
+					orderPrice = orderPrice - (orderPrice * 10 / 100);
+
+					System.out.println("Dobicete popust redovne musterije od 10 %");
+
 				}
 
+				stopOrder = true;
+				System.out.println("Vasa pasta iznosi " + orderPrice + "rsd");
+				System.out.println("Prijatno!");
+			
+			} else {
+				System.out.println();
+				System.out.println("Izvinite, ali trenutno nemamo taj sastojak");
+				System.out.println("Probajte neki drugi sa menija :)");
+
+				for (int i = 0; i < ingridients.length; i++) {
+					System.out.print(ingridients[i] + ", ");
+				}
+				System.out.println();
+				System.out.println();
 			}
+
 		}
 
 	}
