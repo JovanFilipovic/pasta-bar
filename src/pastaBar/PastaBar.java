@@ -10,57 +10,71 @@ public class PastaBar {
 
 		String[] phoneNumbers = { "063111111", "063222222", "063333333", "064444444", "065555555", "066666666" };
 
-		String[] ingridients = { "Makarone", "Spagete", "Bolognese", "Curetina", "Govedja prsuta", "Slanina",
-				"Piletina", "4 sira", "Dimljeni sir", "Parmezan", "Pavlaka", "Pesto sos", "Napolitana", "Povrce mix",
-				"Pecurke", "Kutija" };
+		String[] ingredients = { "makarone", "spagete", "bolognese", "curetina", "govedja prsuta", "slanina",
+				"piletina", "4 sira", "dimljeni sir", "parmezan", "pavlaka", "pesto sos", "napolitana", "povrce mix",
+				"pecurke", "kutija" };
 		int[] prices = { 50, 60, 120, 120, 140, 100, 100, 100, 80, 50, 80, 80, 80, 50, 50, 20 };
 
 		boolean stopOrder = false;
 		int orderPrice = 0;
+		String ordered = "";
+		String ingredient = "";
 
 		System.out.println("Izvolite!! ");
 
 		while (stopOrder == false) {
+			
+			System.out.println("Izaberite sastojak za pastu: ");
+			ingredient = s.nextLine();
+			
+			ingredient = ingredient.toLowerCase();
 
-			System.out.print("Izaberite sastojak za pastu: ");
-			String ingridient = s.next();
+			if (ingredient.equals("poruci")) {
 
-			if (!ingridient.equals("poruci") && findIngredient(ingridients, ingridient) != 0) {
+				if (orderPrice != 0) {
+					System.out.print("Unesite broj telefona: ");
+					String phone = s.next();
+					System.out.println();
 
-				orderPrice = orderPrice + prices[findIngredient(ingridients, ingridient)];
+					if (isRegularCustomer(phoneNumbers, phone) == true) {
 
-				System.out.println("Uzeli ste " + ingridient + " ukupno " + orderPrice + "rsd");
+						orderPrice = orderPrice - (orderPrice * 10 / 100);
 
-			} else if (ingridient.equals("poruci")) {
+						System.out.println("Dobicete popust redovne musterije od 10 %");
 
-				System.out.print("Unesite broj telefona: ");
-				String phone = s.next();
-				System.out.println();
+					}
+					stopOrder = true;
+					System.out.println("Vasa pasta iznosi " + orderPrice + "rsd");
+					System.out.println("Prijatno!");
 
-				if (isRegularCustomer(phoneNumbers, phone) == true) {
+				} else {
 
-					orderPrice = orderPrice - (orderPrice * 10 / 100);
-
-					System.out.println("Dobicete popust redovne musterije od 10 %");
-
+					System.out.println("Nista niste porucili");
 				}
 
-				stopOrder = true;
-				System.out.println("Vasa pasta iznosi " + orderPrice + "rsd");
-				System.out.println("Prijatno!");
-			
+			} else if (findIngredient(ingredients, ingredient) >= 0
+					&& findIngredient(ingredients, ingredient) < ingredients.length) {
+
+				orderPrice = orderPrice + prices[findIngredient(ingredients, ingredient)];
+
+				System.out.println();
+				
+				ordered = ingredients[findIngredient(ingredients, ingredient)] + ", " + ordered;
+				
+				System.out.println("Uzeli ste " + ordered + " ukupno " + orderPrice + "rsd");
+
 			} else {
 				System.out.println();
 				System.out.println("Izvinite, ali trenutno nemamo taj sastojak");
 				System.out.println("Probajte neki drugi sa menija :)");
 
-				for (int i = 0; i < ingridients.length; i++) {
-					System.out.print(ingridients[i] + ", ");
+				for (int i = 0; i < ingredients.length; i++) {
+					System.out.print(ingredients[i] + ", ");
 				}
 				System.out.println();
 				System.out.println();
 			}
-
+			System.out.println();
 		}
 
 	}
@@ -72,7 +86,7 @@ public class PastaBar {
 				return i;
 			}
 		}
-		return 0;
+		return 99;
 	}
 
 	public static boolean isRegularCustomer(String[] phoneNumbers, String phone) {
